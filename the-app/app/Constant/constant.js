@@ -17,7 +17,7 @@ const contractAbi =[
       },
       {
         "internalType": "uint256",
-        "name": "_durationInMinutes",
+        "name": "votingDurationInDays",
         "type": "uint256"
       }
     ],
@@ -162,19 +162,6 @@ const contractAbi =[
   {
     "inputs": [],
     "name": "votingEnd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "votingStart",
     "outputs": [
       {
         "internalType": "uint256",

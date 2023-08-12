@@ -15,21 +15,19 @@ contract Voting {
     address owner;
     mapping(address => bool) public voters;
 
-    uint256 public votingStart;
     uint256 public votingEnd;
 
-constructor(string[] memory _candidateNames,string[] memory _candidateImages, uint256 _durationInMinutes) {
-    for (uint256 i = 0; i < _candidateNames.length; i++) {
-        candidates.push(Candidate({
-            name: _candidateNames[i],
-            image : _candidateImages[i],
-            voteCount: 0
-        }));
+    constructor(string[] memory _candidateNames,string[] memory _candidateImages, uint256 votingDurationInDays) {
+        for (uint256 i = 0; i < _candidateNames.length; i++) {
+            candidates.push(Candidate({
+                name: _candidateNames[i],
+                image : _candidateImages[i],
+                voteCount: 0
+            }));
+        }
+        owner = msg.sender;
+        votingEnd = block.timestamp + votingDurationInDays * 1 days;
     }
-    owner = msg.sender;
-    votingStart = block.timestamp;
-    votingEnd = block.timestamp + (_durationInMinutes * 1 minutes);
-}
 
     modifier onlyOwner {
         require(msg.sender == owner);
@@ -47,6 +45,7 @@ constructor(string[] memory _candidateNames,string[] memory _candidateImages, ui
     function vote(uint256 _candidateIndex) public {
         require(!voters[msg.sender], "You have already voted.");
         require(_candidateIndex < candidates.length, "Invalid candidate index.");
+        require(block.timestamp <= votingEnd, "Voting period has ended.");
 
         candidates[_candidateIndex].voteCount++;
         voters[msg.sender] = true;
@@ -57,14 +56,14 @@ constructor(string[] memory _candidateNames,string[] memory _candidateImages, ui
     }
 
     function getVotingStatus() public view returns (bool) {
-        return (block.timestamp >= votingStart && block.timestamp < votingEnd);
+        return (block.timestamp < votingEnd);
     }
 
     function getRemainingTime() public view returns (uint256) {
-        require(block.timestamp >= votingStart, "Voting has not started yet.");
         if (block.timestamp >= votingEnd) {
             return 0;
-    }
-        return votingEnd - block.timestamp;
+        } else {
+            return votingEnd - block.timestamp;
+        }
     }
 }

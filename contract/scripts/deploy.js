@@ -28,8 +28,9 @@ async function main() {
                         "https://mario.wiki.gallery/images/thumb/2/29/SMPWario.png/800px-SMPWario.png"
                   ];
 
-  const durationInMinutes = 5000;
-  const voting = await Voting.deploy(candidateNames,candidateImages,durationInMinutes);
+  const dateTimeStamp = 1689868800; 
+  const votingDurationInDays = 30; 
+  const voting = await Voting.deploy(candidateNames,candidateImages,votingDurationInDays);
 
   await voting.deployed();
 

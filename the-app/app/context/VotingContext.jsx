@@ -14,10 +14,12 @@ export const VotingProvider = ({ children }) => {
     useEffect(() => {
       checkIfWalletIsConnect();
       getCandidates();
-      getRemainingTime();
-      getCurrentStatus();
-      canVote() ;
-    }, []);
+       getRemainingTime();
+       getCurrentStatus();
+       console.log(votingStatus," votingStatus");
+       canVote() ;
+      }, []);
+      console.log(remainingTime," remainingTime ta3 voting context");
     const getCandidates =async () => {
         if (typeof window.ethereum !== 'undefined') {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -50,7 +52,9 @@ export const VotingProvider = ({ children }) => {
           contractAddress, contractAbi, provider
         );
         const time = await contractInstance.getRemainingTime();
-        setremainingTime(parseInt(time, 16));
+        console.log("time ",time);
+        console.log("time ",time.toNumber());
+        setremainingTime(time.toNumber());
           }catch(e) {
             console.log("There is an error: ",e);
         } 

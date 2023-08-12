@@ -1,13 +1,38 @@
 'use client'
-import React,{useContext} from 'react'
+import React,{useContext,useState,useEffect} from 'react'
 import { VotingContext } from '../context/VotingContext'
 import Countdown from 'react-countdown';
-
+import { createTimeModel, useTimeModel } from "react-compound-timer";
 const Connected = () => {
     const {remainingTime,currentAccount,hasVoted,votingStatus} = useContext(VotingContext);
+    
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(remainingTime));
 
-      
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const newTimeLeft = calculateTimeLeft(timeLeft.total - 1);
+      setTimeLeft(newTimeLeft);
+      if (newTimeLeft.total <= 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  function calculateTimeLeft(seconds) {
+    const total = seconds;
+    const days = Math.floor(total / (60 * 60 * 24));
+    const hours = Math.floor((total / (60 * 60)) % 24);
+    const minutes = Math.floor((total / 60) % 60);
+    const secondsLeft = Math.floor(total % 60);
+
+    return { total, days, hours, minutes, seconds: secondsLeft };
+  }
+
+  
     return (
+      
     <div className="flex items-center justify-between p-4">
         <div className="text-gray-700 font-semibold">
             Decentralized Voting App
@@ -22,9 +47,18 @@ const Connected = () => {
             }
         </div>
         <div className="text-gray-700 font-semibold  items-center ">
-            {/* <p>Time left: {formatTime(timeLeft)}</p> */}
-            <p>Time Left</p>
-            <p><Countdown date={Date.now() + remainingTime*1000} /></p>
+        <p>Remaining Time:</p>
+        <div>
+      {timeLeft.total > 0 ? (
+        <div>
+            {timeLeft.days} d {timeLeft.hours} h {timeLeft.minutes} m {' '}
+            {timeLeft.seconds} s
+          </div>
+        ) : (
+          <div>Voting has ended!</div>
+        )}
+      </div>
+   
         </div>
     </div>
 

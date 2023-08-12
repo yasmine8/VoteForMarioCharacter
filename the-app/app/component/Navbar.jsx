@@ -20,13 +20,11 @@ const Navbar = () => {
 
   const toggleSound = () => {
     const audio = audioRef.current;
-
     if (isPlaying) {
       audio.pause();
     } else {
       audio.play();
     }
-
     setIsPlaying(!isPlaying);
   };
 
@@ -34,9 +32,8 @@ const Navbar = () => {
     <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b-4 border-red-200">
     <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
       <div className="flex items-center">
-        <audio autoPlay muted ref={audioRef} src="/sounds/MarioKartSound.mp3" 
-        
-        />
+      
+        <audio autoPlay muted ref={audioRef} src="/sounds/MarioKartSound.mp3" />
         <button onClick={toggleSound} className="mr-2">
           {isPlaying ? (
             <FontAwesomeIcon icon={faVolumeHigh} className="text-red-500" />
